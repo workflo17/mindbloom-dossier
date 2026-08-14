@@ -1,0 +1,95 @@
+<title>How this dossier was made · Mindbloom Dossier</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F2F5EF">
+<style>
+  :root {
+    color-scheme: light;
+    --paper: #F2F5EF; --card: #FFFFFF; --ink: #1F2A22; --muted: #57665B;
+    --pine: #2E5C45; --line: #D9E1D5; --chip-bg: #F1E3BE; --chip-ink: #6E4E12;
+    --serif: "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: system-ui, "Segoe UI", sans-serif;
+    --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans);
+         font-size: 1.0625rem; line-height: 1.68; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--pine); }
+  a:hover { color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--pine); outline-offset: 2px; border-radius: 2px; }
+  header { padding: 64px 0 10px; }
+  .eyebrow { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em;
+             text-transform: uppercase; color: var(--pine); margin-bottom: 14px; }
+  .eyebrow a { text-decoration: none; color: var(--pine); }
+  h1 { font-family: var(--serif); font-size: clamp(2rem, 5vw, 2.8rem); line-height: 1.1;
+       text-wrap: balance; margin-bottom: 16px; }
+  .standfirst { color: var(--muted); font-size: 1.08rem; max-width: 58ch; }
+  main { padding: 24px 0 20px; }
+  h2 { font-family: var(--serif); font-size: 1.4rem; margin: 34px 0 10px; text-wrap: balance; }
+  p { margin-bottom: 13px; max-width: 64ch; }
+  ul { margin: 0 0 13px 22px; }
+  li { margin-bottom: 7px; max-width: 60ch; }
+  .log { font-family: var(--mono); font-size: 0.85rem; line-height: 1.6; margin: 14px 0 8px;
+         border-left: 2px solid var(--line); }
+  .log li { list-style: none; padding: 8px 0 8px 20px; position: relative; margin: 0; }
+  .log li::before { content: ""; position: absolute; left: -5px; top: 16px; width: 8px; height: 8px;
+                    border-radius: 50%; background: var(--pine); }
+  .log b { color: var(--pine); font-weight: 600; }
+  .caught { background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+            padding: 18px 22px; margin: 14px 0; font-size: 0.95rem; }
+  .caught .tag { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.13em;
+                 text-transform: uppercase; color: var(--pine); display: block; margin-bottom: 6px; }
+  .caught ul { margin-bottom: 0; }
+  footer { border-top: 1px solid var(--line); margin-top: 40px; padding: 24px 0 60px;
+           font-size: 0.85rem; color: var(--muted); }
+  footer p { max-width: 70ch; margin-bottom: 8px; }
+</style>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow"><a href="index.html">Mindbloom Dossier</a> · 07 · How this was made</p>
+    <h1>One director, a fleet of agents, one day.</h1>
+    <p class="standfirst">Your posting says AI-first people "harness AI like a superpower." Fair to ask what that means in practice. This page is the answer: how everything you just read was actually built, on August 14, 2026, including what the machines got wrong and what caught it.</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <h2>The operating model</h2>
+    <p>I have no formal programming background. Everything in this dossier, and the <a href="https://tend-demo-workflo17.vercel.app">Tend prototype</a> before it, was built by directing fleets of Claude agents: research agents that fetch and cite, build agents that write code against a spec and a design system, and a verification pass that treats every agent's work as a claim to be checked rather than a result to be trusted. When several agents work the same project at once, they follow <a href="https://github.com/workflo17/agent-lanes">agent-lanes</a>, a single-writer coordination protocol I wrote after learning the collision lesson the honest way.</p>
+
+    <h2>How the day actually went</h2>
+    <ul class="log">
+      <li><b>Morning.</b> Tend: the guarded re-engagement prototype, built in two sittings, deployed, then extended to five roadmap sketches after research surfaced your open Lifecycle role.</li>
+      <li><b>Afternoon.</b> Two research agents in parallel: one walking the public funnel page by page, one collecting 58 verbatim review quotes across Trustpilot, Reddit archives, the BBB, app stores, and press, with a hard rule that an unquotable page gets logged as unreachable, never paraphrased into a quote.</li>
+      <li><b>Same window.</b> Two build agents in parallel: the Ledger calculator and the crisis red-team suite, each against the dossier's shared design tokens.</li>
+      <li><b>Evening.</b> The human part: reading everything, writing the four documents (teardown, experiment memo, client-voice analysis, the 90-day plan), and the verification pass on every page.</li>
+    </ul>
+
+    <h2>What verification caught</h2>
+    <div class="caught">
+      <span class="tag">Kept honestly, because this is the actual job</span>
+      <ul>
+        <li>A research agent's first pass blended a paraphrase into a quotation; the rule held and the quote was cut. Two entries died for it.</li>
+        <li>The calculator agent shipped a field that visually clipped five-digit inputs; caught in its own verification pass, fixed, re-tested at both extremes.</li>
+        <li>The red-team harness's most useful output was a failure: idiom guards took keyword precision from 25 to 100 percent while recall stayed at 13, which became the page's headline argument instead of being buried.</li>
+        <li>A build agent used an em dash in a title, against this dossier's own style contract; a sweep caught it before deploy.</li>
+      </ul>
+    </div>
+    <p>That list is the point. The agents are fast and tireless and wrong in small ways at a steady rate, and the craft of AI-first work is the checking: browser-level verification of every page, re-running every harness, hash-comparing every deploy, and reading every quote against its source. Speed without that is just confident noise.</p>
+
+    <h2>What stayed human</h2>
+    <p>Which findings to publish and how to say them. The tone taken with sensitive material, and the decision to disclose this corpus's negative skew rather than enjoy it. Every judgment about what a nervous first-time client deserves to hear. And all five "what I would do" calls, which come from four years of doing the human version of this job by hand.</p>
+
+    <h2>Why this page exists</h2>
+    <p>Because the dossier itself is the resume line I could never write believably any other way. "Directs AI agent fleets" is a claim; seven verified pieces in a day is a receipt. If this is how much ground one person can cover before being hired, that is the argument for the hire.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Part of a work-sample dossier by Don Florencio, made to accompany a Mindbloom application. Not affiliated with or endorsed by Mindbloom.</p>
+    <p><a href="index.html">Back to the dossier</a></p>
+  </div>
+</footer>

@@ -1,0 +1,134 @@
+<title>Experiment: the payment-plan touch · Mindbloom Dossier</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F2F5EF">
+<style>
+  :root {
+    color-scheme: light;
+    --paper: #F2F5EF; --card: #FFFFFF; --ink: #1F2A22; --muted: #57665B;
+    --pine: #2E5C45; --line: #D9E1D5; --chip-bg: #F1E3BE; --chip-ink: #6E4E12;
+    --serif: "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: system-ui, "Segoe UI", sans-serif;
+    --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans);
+         font-size: 1.0625rem; line-height: 1.68; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--pine); }
+  a:hover { color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--pine); outline-offset: 2px; border-radius: 2px; }
+  header { padding: 64px 0 10px; }
+  .eyebrow { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em;
+             text-transform: uppercase; color: var(--pine); margin-bottom: 14px; }
+  .eyebrow a { text-decoration: none; color: var(--pine); }
+  h1 { font-family: var(--serif); font-size: clamp(1.9rem, 5vw, 2.7rem); line-height: 1.12;
+       text-wrap: balance; margin-bottom: 20px; }
+  .docmeta { font-family: var(--mono); font-size: 0.78rem; color: var(--muted);
+             border: 1px solid var(--line); border-radius: 10px; background: var(--card);
+             padding: 12px 16px; line-height: 1.9; margin-bottom: 8px; }
+  main { padding: 24px 0 20px; }
+  h2 { font-family: var(--serif); font-size: 1.35rem; margin: 34px 0 10px; text-wrap: balance; }
+  p, li { max-width: 64ch; }
+  p { margin-bottom: 13px; }
+  ul, ol { margin: 0 0 13px 22px; }
+  li { margin-bottom: 7px; }
+  .tldr { background: var(--card); border-left: 3px solid var(--pine); border-radius: 0 10px 10px 0;
+          padding: 16px 20px; margin-bottom: 8px; }
+  .tldr p:last-child { margin-bottom: 0; }
+  .copyblock { background: var(--card); border: 1px dashed var(--pine); border-radius: 10px;
+               padding: 14px 18px; font-size: 0.95rem; margin: 10px 0 14px; max-width: 58ch; }
+  .copyblock .label { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.12em;
+                      text-transform: uppercase; color: var(--pine); display: block; margin-bottom: 6px; }
+  .quiet { color: var(--muted); font-size: 0.93rem; }
+  table { border-collapse: collapse; font-size: 0.93rem; margin-bottom: 14px; }
+  th, td { text-align: left; padding: 7px 14px 7px 0; border-bottom: 1px solid var(--line);
+           vertical-align: top; }
+  th { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+       color: var(--muted); }
+  .num { font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 0.9rem; }
+  footer { border-top: 1px solid var(--line); margin-top: 40px; padding: 24px 0 60px;
+           font-size: 0.85rem; color: var(--muted); }
+  footer p { max-width: 70ch; margin-bottom: 8px; }
+</style>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow"><a href="index.html">Mindbloom Dossier</a> · 04 · Written proposal</p>
+    <h1>Experiment: say the payment plan out loud, one touch early.</h1>
+    <div class="docmeta">
+      author: Don Florencio (candidate) · date: August 14, 2026<br>
+      status: proposal, seeking review · asks: growth (owner), clinical comms (copy sign-off)<br>
+      format note: written async-first, on purpose
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tldr">
+      <p><strong>TL;DR.</strong> Cost-stalled leads never hear that programs bill monthly unless they go find the pricing page themselves. I propose adding one sentence about the monthly plan and the medical-fit refund to the second lifecycle touch for stalled leads, and measuring whether saying it early books more consults than making people discover it. One copy change, one metric, four guardrails, and a kill switch. If it moves booking by a single point, <a href="calculator.html">the Ledger</a> shows what that is worth downstream.</p>
+    </div>
+
+    <h2>The observation</h2>
+    <p>Three facts from the public funnel (<a href="funnel-teardown.html">walked in piece 05</a>):</p>
+    <ul>
+      <li>No dollar figure appears unprompted anywhere on the primary path. Cost lives only on the pricing page, which the visitor must seek out.</li>
+      <li>When cost does appear, the first number shown ($165 a session) requires the largest, nine-month commitment. The actual entry program is $215 a session, $1,290 total, billed $430 a month for three months.</li>
+      <li>The refund promise ("full refund if not a medical fit") is genuinely strong and genuinely underused: it appears on the pricing page and the program explainer, not in the moments where a stalled lead is deciding whether to come back.</li>
+    </ul>
+    <p>And one voice from the real corpus (<a href="voice-of-the-client.html">piece 01</a>), a would-be client stalled at the exact moment this experiment targets:</p>
+    <div class="copyblock">
+      <span class="label">Verbatim, r/TherapeuticKetamine</span>
+      "I want to sign up to Mindbloom but am confused by the pricing. Its says $195/session on mindbloom.com/pricing for new clients but when I go through the questions and create an account it says $386/session. What is going on here?"
+    </div>
+    <p>The hypothesis behind the hypothesis: people do not stall because the price is large, they stall because the price arrives as a surprise, alone, with no shape. A monthly number with a refund attached has a shape.</p>
+
+    <h2>Hypothesis</h2>
+    <p>Naming the monthly payment plan and the medical-fit refund in the second re-engagement touch, before the lead asks, will lift stalled-lead consult bookings by at least one percentage point, without raising opt-outs or downstream refunds.</p>
+
+    <h2>The test</h2>
+    <table>
+      <tr><th>Audience</th><td>Leads who completed the eligibility check, viewed pricing or stalled at checkout, and booked nothing within 48 hours. The consented, opted-in segment only.</td></tr>
+      <tr><th>Control</th><td>The current second touch, unchanged.</td></tr>
+      <tr><th>Treatment</th><td>Identical, plus one sentence:</td></tr>
+    </table>
+    <div class="copyblock">
+      <span class="label">Treatment sentence, draft for clinical comms review</span>
+      Worth knowing: programs are billed monthly, the starter works out to $430 a month for three months, and if our clinician decides treatment is not a fit for you, you get a full refund.
+    </div>
+    <p class="quiet">Dollar figures mirror the public pricing page and would track it programmatically. Copy tone matches the guarded-agent rules in the <a href="https://tend-demo-workflo17.vercel.app">Tend prototype</a>: plain numbers, no urgency, refund stated as protection rather than pitch.</p>
+
+    <h2>Metrics</h2>
+    <ul>
+      <li><strong>Primary:</strong> consult bookings per 100 treated leads within 7 days of the touch.</li>
+      <li><strong>Guardrails (any regression pauses the test):</strong> opt-out rate on the touch, complaint or negative-reply rate, downstream medical-fit refund rate, and consult show rate (booking more but showing less is a loss, not a win).</li>
+      <li><strong>Secondary:</strong> replies to the touch, read weekly by a human and mined for language, per the reply-digest workflow in <a href="voice-of-the-client.html">piece 01</a>.</li>
+    </ul>
+
+    <h2>Sample size, in plain English</h2>
+    <p>With the standard two-proportion math: if the baseline stalled-lead booking rate is around 8 percent, detecting a 1.5 point lift at 80 percent power and the usual 5 percent significance needs roughly <span class="num">5,200</span> leads per arm. At 4,000 completed checks a month and a plausible stall share, that is a several-week test, not a several-day one. The honest version of this section needs the real baseline from the warehouse; the method stands either way, and I would rather state the assumption than fake the precision.</p>
+
+    <h2>Kill criteria, decided before launch</h2>
+    <ul>
+      <li>Opt-out rate rises by half a point absolute over control: stop.</li>
+      <li>Any indication the added sentence reaches a lead flagged for human-only handling: stop immediately and audit the segment gate. Money talk never follows a crisis flag, full stop (see <a href="redteam/redteam.html">piece 03</a>).</li>
+      <li>Refund-rate guardrail regresses: stop and review with clinical before any rerun.</li>
+    </ul>
+
+    <h2>Decision rule</h2>
+    <p>Ship the sentence to all stalled-lead cadences if the primary lifts at least one point with flat guardrails. If it lifts less than that but replies show cost questions arriving earlier and warmer, run the follow-up test (same sentence, first touch instead of second) before deciding. If guardrails degrade, the candor thesis is wrong in this form, and that is worth knowing on paper too.</p>
+
+    <h2>Why this experiment first</h2>
+    <p>It is the cheapest test that can validate the most important thesis in this dossier: that cost candor converts the nervous middle better than cost hide-and-seek. One sentence, no design work, no new surface, guarded by metrics the team already trusts. And if one point of booking is real, <a href="calculator.html">the Ledger's</a> arithmetic says the downstream value funds a lot of week twos.</p>
+
+    <p class="quiet">Known unknowns, stated plainly: I do not have the real baseline rates, the internal cadence copy, or the compliance rules on price display in SMS, which is why the first named reviewer is clinical comms, not growth.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Part of a work-sample dossier by Don Florencio, made to accompany a Mindbloom application. Not affiliated with or endorsed by Mindbloom. Public pricing figures as of August 14, 2026.</p>
+    <p><a href="index.html">Back to the dossier</a></p>
+  </div>
+</footer>

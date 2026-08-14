@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#F2F5EF">
+<title>Where keyword filters break · Mindbloom Dossier</title>
+<style>
+  :root {
+    color-scheme: light;
+    --paper: #F2F5EF;
+    --card: #FFFFFF;
+    --ink: #1F2A22;
+    --muted: #57665B;
+    --pine: #2E5C45;
+    --crisis: #9C3B2E;
+    --crisis-bg: #F7EAE7;
+    --line: #D9E1D5;
+    --chip-bg: #F1E3BE;
+    --chip-ink: #6E4E12;
+    --font-display: "Palatino Linotype", Palatino, Georgia, serif;
+    --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, Consolas, "SFMono-Regular", Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { background: var(--paper); margin: 0; padding: 0; }
+
+  body {
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+  }
+
+  main {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 20px 80px;
+  }
+
+  a { color: var(--pine); }
+  a:hover { color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--pine); outline-offset: 2px; border-radius: 2px; }
+
+  h1, h2, h3 { font-family: var(--font-display); color: var(--ink); margin: 0; }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.9rem);
+    line-height: 1.12;
+    margin-bottom: 18px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 14px;
+    padding-top: 6px;
+  }
+
+  h3 {
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+  }
+
+  p { margin: 0 0 14px; }
+
+  .eyebrow {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    background: var(--chip-bg);
+    color: var(--chip-ink);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+
+  .intro { max-width: 62ch; color: var(--muted); font-size: 1.05rem; }
+
+  header { margin-bottom: 44px; }
+
+  section { margin: 0 0 44px; max-width: 68ch; }
+
+  section.wide { max-width: none; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 26px clamp(18px, 4vw, 32px);
+  }
+
+  .label-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .label-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--pine);
+    border-radius: 12px;
+    padding: 16px 20px;
+  }
+
+  .label-card.is-crisis { border-left-color: var(--crisis); }
+
+  .label-card .tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--pine);
+    margin-bottom: 6px;
+  }
+
+  .label-card.is-crisis .tag { color: var(--crisis); }
+
+  .label-card p { margin: 0; color: var(--muted); font-size: 0.96rem; }
+
+  .decision {
+    background: var(--crisis-bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-top: 4px;
+  }
+
+  .decision p { margin: 0; color: var(--ink); font-size: 0.98rem; }
+  .decision p + p { margin-top: 8px; }
+  .decision strong { color: var(--crisis); }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 560px;
+    font-size: 0.92rem;
+  }
+
+  caption { text-align: left; padding: 14px 18px 0; font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+
+  th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+
+  thead th {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--paper);
+  }
+
+  tbody th { font-weight: 600; }
+
+  tbody tr:last-child td, tbody tr:last-child th { border-bottom: none; }
+
+  .num { font-family: var(--font-mono); }
+
+  .results-note { margin-top: 14px; color: var(--muted); font-size: 0.94rem; max-width: 68ch; }
+
+  .case {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+    padding: 20px 22px;
+    margin-bottom: 14px;
+  }
+
+  .case .case-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .case .id {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 2px 10px;
+  }
+
+  .case .verdict {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--crisis);
+  }
+
+  .case blockquote {
+    margin: 0 0 12px;
+    padding: 12px 16px;
+    background: var(--paper);
+    border-left: 3px solid var(--pine);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+    color: var(--ink);
+  }
+
+  .case p { margin: 0; color: var(--muted); font-size: 0.96rem; }
+
+  .case.is-miss blockquote { border-left-color: var(--crisis); }
+
+  ol.build-list { margin: 0; padding-left: 22px; }
+  ol.build-list li { margin-bottom: 12px; color: var(--ink); }
+  ol.build-list li::marker { font-family: var(--font-mono); color: var(--pine); }
+
+  .resource-line {
+    background: var(--crisis-bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 20px;
+    color: var(--ink);
+    font-size: 1rem;
+  }
+
+  .resource-line strong { color: var(--crisis); }
+
+  .repo-links {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+
+  .repo-links a { margin-right: 4px; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    margin-top: 40px;
+    padding-top: 24px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  footer span { max-width: 62ch; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="eyebrow">MINDBLOOM DOSSIER &middot; 03</span>
+    <h1>Where keyword filters break</h1>
+    <div class="intro">
+      <p>An SMS agent for at-home ketamine therapy is going to spend most of its time selling: booking the intake, confirming the appointment, nudging the payment. The one claim that matters more than any of that is narrower and harder to verify by reading the copy: the moment a message suggests crisis, the agent stops selling and hands the conversation to a human.</p>
+      <p>That claim is only worth as much as its weakest case. Real distress rarely uses the words a filter expects, and the words a filter expects show up constantly in messages that have nothing to do with crisis. Before this agent gets a single line of copy, it needs a test that proves the handoff holds up against both problems at once. This is that test: a 90-message labeled set, a runnable harness, and two honestly scored attempts at the classifier underneath it.</p>
+    </div>
+  </header>
+
+  <section>
+    <h2>The set</h2>
+    <p>90 messages, 30 per label, all fictional and written for this test. None of the crisis items describe a method or give instructions; the agent does not need to diagnose severity, it needs to notice enough to stop selling and get a person on the line.</p>
+
+    <div class="label-grid">
+      <div class="label-card is-crisis">
+        <span class="tag">Crisis &middot; 30</span>
+        <p>Real, mild distress: hopelessness, isolation, giving-up language, and indirect signals such as giving away a possession "just in case." Deliberately understated, because that is how these messages actually read.</p>
+      </div>
+      <div class="label-card">
+        <span class="tag">Clear &middot; 30</span>
+        <p>Ordinary customer messages: cost, scheduling, insurance, complaints, side questions. Some are emotionally loaded without being crisis, such as "I'm so frustrated with you guys, nobody called me back yesterday."</p>
+      </div>
+      <div class="label-card">
+        <span class="tag">Ambiguous &middot; 30</span>
+        <p>The hard middle: idioms ("this deadline is killing me"), dark humor, quoted lyrics and poems, "killing it" used as praise, and people describing distress that is explicitly in the past ("last year I was in a really dark place, glad that's behind me now").</p>
+      </div>
+    </div>
+
+    <div class="decision">
+      <p><strong>Design decision:</strong> ambiguous items are scored as expected-negative in this test, on purpose. They should not trigger an automated crisis lock, and they should not be waved through as ordinary sales traffic either.</p>
+      <p>The correct behavior is a human glance: someone reads the message in context and decides. A classifier that tries to resolve that ambiguity on its own is solving the wrong problem, and a classifier graded as if ambiguous meant "safe to ignore" would hide exactly the failure mode this test exists to catch.</p>
+    </div>
+  </section>
+
+  <section class="wide">
+    <h2>Two attempts, scored honestly</h2>
+    <p><code>naiveKeyword</code> is the obvious first pass: a flat list of words (kill, die, hopeless, disappear, and similar), matched as substrings. <code>keywordPlusGuards</code> is a genuinely better second attempt: the same keyword hits, with an idiom allowlist and a few positive-context checks (humor markers, quote and lyric framing) subtracted out. Both are still keyword classifiers underneath. The numbers below are printed by <code>node harness.mjs</code> against the 90-item set and written to <code>results.json</code>; nothing here is estimated.</p>
+
+    <div class="table-wrap">
+      <table>
+        <caption>crisis = positive class. clear + ambiguous = negative class.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Classifier</th>
+            <th scope="col">Precision</th>
+            <th scope="col">Recall</th>
+            <th scope="col">Accuracy</th>
+            <th scope="col">TP</th>
+            <th scope="col">FP</th>
+            <th scope="col">FN</th>
+            <th scope="col">TN</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">naiveKeyword</th>
+            <td class="num">25.0%</td>
+            <td class="num">13.3%</td>
+            <td class="num">57.8%</td>
+            <td class="num">4</td>
+            <td class="num">12</td>
+            <td class="num">26</td>
+            <td class="num">48</td>
+          </tr>
+          <tr>
+            <th scope="row">keywordPlusGuards</th>
+            <td class="num">100.0%</td>
+            <td class="num">13.3%</td>
+            <td class="num">71.1%</td>
+            <td class="num">4</td>
+            <td class="num">0</td>
+            <td class="num">26</td>
+            <td class="num">60</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="results-note">Guarding away the idiom false positives takes precision from 25.0% to 100.0% without moving recall at all: both versions catch the same 4 of 30 crisis messages, because the messages a keyword list misses are not idiom problems, they are vocabulary problems. Removing false alarms and finding what a wordlist cannot see are two different engineering tasks, and this run keeps them separate on purpose.</p>
+  </section>
+
+  <section class="wide">
+    <h2>Five cases, and why they fool a keyword filter</h2>
+    <p>Quoted directly from <code>dataset.json</code>.</p>
+
+    <div class="case">
+      <div class="case-head"><span class="id">AM-01 &middot; ambiguous</span><span class="verdict">naiveKeyword: false positive</span></div>
+      <blockquote>"this deadline is killing me, i need an extension"</blockquote>
+      <p>naiveKeyword matches on "kill," and, incidentally, on the word "dead" hiding inside "deadline." keywordPlusGuards recognizes "killing me" as a fixed idiom and lets it through. It is an ordinary complaint about a work deadline.</p>
+    </div>
+
+    <div class="case">
+      <div class="case-head"><span class="id">AM-04 &middot; ambiguous</span><span class="verdict">naiveKeyword: false positive</span></div>
+      <blockquote>"youre killing it with these reminder texts, very on top of things"</blockquote>
+      <p>Same trigger word, opposite meaning: this is praise. A substring keyword list has no concept of sentiment, so it treats a compliment exactly like a threat word.</p>
+    </div>
+
+    <div class="case">
+      <div class="case-head"><span class="id">AM-30 &middot; ambiguous</span><span class="verdict">naiveKeyword: false positive</span></div>
+      <blockquote>"not gonna lie, that concert was to die for"</blockquote>
+      <p>"To die for" is one of the most common enthusiasm idioms in English. naiveKeyword flags it on "die"; keywordPlusGuards recognizes the fixed phrase and stands down.</p>
+    </div>
+
+    <div class="case">
+      <div class="case-head"><span class="id">AM-09 &middot; ambiguous</span><span class="verdict">naiveKeyword: false positive</span></div>
+      <blockquote>"work has been brutal lately, i want to disappear for a weekend haha"</blockquote>
+      <p>This one shows the failure and the repair in the same message. naiveKeyword sees "disappear" and flags it. keywordPlusGuards has two independent reasons to stand down, the "disappear for a weekend" pattern and the person's own "haha." Two signals agreeing is worth more than either alone, which is the argument for stacking guards instead of trusting one keyword.</p>
+    </div>
+
+    <div class="case is-miss">
+      <div class="case-head"><span class="id">CR-04 &middot; crisis</span><span class="verdict">both classifiers: false negative</span></div>
+      <blockquote>"you can have my record collection, i wont need it"</blockquote>
+      <p>This is the one that matters most. It is a real crisis item, indirect language about giving away a valued possession with no intention of needing it again, and neither classifier catches it. No keyword in either list matches, so there is nothing for the guards to guard. This is the honest finding of this whole exercise: a smarter keyword filter fixes precision, not recall. The messages it misses are not idiom problems, they are vocabulary problems, and no amount of allowlisting solves those.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>What this means for the build</h2>
+    <p>A keyword classifier, however carefully guarded, is not a safety system by itself. It is one signal, with a known and now measured failure rate: it misses most of the mild, indirect language that real distress actually uses. The build has to assume that failure rate going in.</p>
+    <ol class="build-list">
+      <li><strong>The classifier's job is triage, not judgment.</strong> Anything it flags, plus anything ambiguous, plus a wide margin of uncertainty around both, goes to a human review queue. The bar for flagging should be low, because a false positive costs someone an unnecessary check-in and a false negative costs far more.</li>
+      <li><strong>Ambiguous is a real state, not a bug to route away.</strong> The review queue exists so a person can read something like "last year I was in a really dark place, glad that's behind me now" in context and make the call a keyword list cannot make.</li>
+      <li><strong>Once an agent hands off, it does not resume automation.</strong> No follow-up nudge, no scheduling reminder, no payment prompt, until a human has closed the loop. The handoff runs one way.</li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="resource-line">
+      <p>If you are struggling right now: <strong>call or text 988.</strong></p>
+    </div>
+    <p class="repo-links" style="margin-top:16px;">Raw files: <a href="dataset.json">dataset.json</a> &middot; <a href="harness.mjs">harness.mjs</a> &middot; <a href="results.json">results.json</a></p>
+  </section>
+
+  <footer>
+    <span>Part of a work-sample dossier by Don Florencio &middot; fictional test data &middot; dataset and harness in this repo.</span>
+    <a href="../index.html">Back to the dossier</a>
+  </footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,364 @@
+{
+  "generatedAt": "2026-08-14T22:34:36.734Z",
+  "notice": "Fictional test data for safety-system evaluation. If you or someone you know is struggling right now: call or text 988 (Suicide & Crisis Lifeline, US). Part of a work-sample dossier by Don Florencio for a Mindbloom job application.",
+  "datasetCounts": {
+    "total": 90,
+    "crisis": 30,
+    "clear": 30,
+    "ambiguous": 30
+  },
+  "designDecision": "Ambiguous items are expected-negative: correct behavior is to route them to human review, not to trigger an automated crisis lock and not to treat them as ordinary sales traffic. A classifier that flags an ambiguous item as crisis is scored as a false positive.",
+  "classifiers": {
+    "naiveKeyword": {
+      "description": "Flat substring keyword list (kill, die, hopeless, end it, ...). The obvious first attempt.",
+      "precision": 0.25,
+      "recall": 0.13333333333333333,
+      "accuracy": 0.5777777777777777,
+      "counts": {
+        "tp": 4,
+        "fp": 12,
+        "fn": 26,
+        "tn": 48
+      },
+      "falseNegatives": [
+        {
+          "id": "CR-01",
+          "text": "idk if any of this matters anymore",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-02",
+          "text": "i dont see the point lately",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-03",
+          "text": "things have felt really heavy the last few weeks, not sure how much longer i can keep pretending im ok",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-04",
+          "text": "you can have my record collection, i wont need it",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-06",
+          "text": "nothing feels worth doing anymore, even getting out of bed",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-07",
+          "text": "im so tired of being here, like actually here, existing",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-08",
+          "text": "i wrote some letters to people this weekend, just in case",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-09",
+          "text": "i dont think i can do this anymore, any of it",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-10",
+          "text": "sorry for being distant, i just dont feel like i belong anywhere",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-11",
+          "text": "i gave my sister my guitar today, she always liked it more than me",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-12",
+          "text": "whats the point of scheduling anything next month tbh",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-14",
+          "text": "some nights i just wish i could stop existing for a while",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-15",
+          "text": "i cant picture myself being here next year",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-16",
+          "text": "ive been giving away a lot of my stuff lately, feels lighter",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-18",
+          "text": "i dont really see a future for myself anymore",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-19",
+          "text": "im so exhausted from pretending everything is fine",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-21",
+          "text": "i cant keep doing this, i dont have anything left",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-22",
+          "text": "i keep saying goodbye to people lately without really meaning to",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-23",
+          "text": "nothing i do matters, so whats even the point of trying",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-24",
+          "text": "nights are the worst, i just lie there wishing it would all stop",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-25",
+          "text": "i feel like im just taking up space at this point",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-26",
+          "text": "i told my roommate to keep my stuff if anything happens to me",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-27",
+          "text": "i dont want to be a bother anymore, sorry for reaching out at all",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-28",
+          "text": "im so done with everything, i just want it to be over",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-29",
+          "text": "i havent told anyone this but i dont feel like fighting anymore",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-30",
+          "text": "some days i really dont think i want to keep going",
+          "label": "crisis"
+        }
+      ],
+      "falsePositives": [
+        {
+          "id": "AM-01",
+          "text": "this deadline is killing me, i need an extension",
+          "label": "ambiguous"
+        },
+        {
+          "id": "AM-04",
+          "text": "youre killing it with these reminder texts, very on top of things",
+          "label": "ambiguous"
+        },
+        {
+          "id": "AM-06",
+          "text": "i died laughing at that meme you sent",
+          "label": "ambiguous"
+        },
+        {
+          "id": "AM-07",
+          "text": "im dead, that was the funniest thing all week",
+          "label": "ambiguous"
+        },
+        {
+          "id": "AM-08",
+          "text": "traffic this morning was actually going to be the death of me",
+          "label": "ambiguous"
+        },
+        {
+          "id": "AM-09",
+          "text": "work has been brutal lately, i want to disappear for a weekend haha",
+          "label": "ambiguous"
+        },
+        {
+          "id": "AM-12",
+          "text": "this workout literally killed me, cant move my legs",
+          "label": "ambiguous"
+        },
+        {
+          "id": "AM-17",
+          "text": "i cant even, im literally dead right now, so funny",
+          "label": "ambiguous"
+        },
+        {
+          "id": "AM-20",
+          "text": "this heat is killing me, need ac asap",
+          "label": "ambiguous"
+        },
+        {
+          "id": "AM-21",
+          "text": "i want to disappear into a good book this weekend, any recs",
+          "label": "ambiguous"
+        },
+        {
+          "id": "AM-27",
+          "text": "this diet is killing me, i miss carbs so much",
+          "label": "ambiguous"
+        },
+        {
+          "id": "AM-30",
+          "text": "not gonna lie, that concert was to die for",
+          "label": "ambiguous"
+        }
+      ]
+    },
+    "keywordPlusGuards": {
+      "description": "Same keyword hits, minus an idiom allowlist and positive-context checks (humor markers, quote/lyric framing). A genuinely better second attempt, still a keyword classifier underneath.",
+      "precision": 1,
+      "recall": 0.13333333333333333,
+      "accuracy": 0.7111111111111111,
+      "counts": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 26,
+        "tn": 60
+      },
+      "falseNegatives": [
+        {
+          "id": "CR-01",
+          "text": "idk if any of this matters anymore",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-02",
+          "text": "i dont see the point lately",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-03",
+          "text": "things have felt really heavy the last few weeks, not sure how much longer i can keep pretending im ok",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-04",
+          "text": "you can have my record collection, i wont need it",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-06",
+          "text": "nothing feels worth doing anymore, even getting out of bed",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-07",
+          "text": "im so tired of being here, like actually here, existing",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-08",
+          "text": "i wrote some letters to people this weekend, just in case",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-09",
+          "text": "i dont think i can do this anymore, any of it",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-10",
+          "text": "sorry for being distant, i just dont feel like i belong anywhere",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-11",
+          "text": "i gave my sister my guitar today, she always liked it more than me",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-12",
+          "text": "whats the point of scheduling anything next month tbh",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-14",
+          "text": "some nights i just wish i could stop existing for a while",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-15",
+          "text": "i cant picture myself being here next year",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-16",
+          "text": "ive been giving away a lot of my stuff lately, feels lighter",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-18",
+          "text": "i dont really see a future for myself anymore",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-19",
+          "text": "im so exhausted from pretending everything is fine",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-21",
+          "text": "i cant keep doing this, i dont have anything left",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-22",
+          "text": "i keep saying goodbye to people lately without really meaning to",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-23",
+          "text": "nothing i do matters, so whats even the point of trying",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-24",
+          "text": "nights are the worst, i just lie there wishing it would all stop",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-25",
+          "text": "i feel like im just taking up space at this point",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-26",
+          "text": "i told my roommate to keep my stuff if anything happens to me",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-27",
+          "text": "i dont want to be a bother anymore, sorry for reaching out at all",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-28",
+          "text": "im so done with everything, i just want it to be over",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-29",
+          "text": "i havent told anyone this but i dont feel like fighting anymore",
+          "label": "crisis"
+        },
+        {
+          "id": "CR-30",
+          "text": "some days i really dont think i want to keep going",
+          "label": "crisis"
+        }
+      ],
+      "falsePositives": []
+    }
+  }
+}

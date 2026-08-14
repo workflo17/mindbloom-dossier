@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Show-Rate Ledger · Mindbloom Dossier</title>
+<style>
+  :root {
+    --paper: #F2F5EF;
+    --card: #FFFFFF;
+    --ink: #1F2A22;
+    --muted: #57665B;
+    --pine: #2E5C45;
+    --line: #D9E1D5;
+    --chip-bg: #F1E3BE;
+    --chip-ink: #6E4E12;
+    --font-display: "Palatino Linotype", Palatino, Georgia, serif;
+    --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, Consolas, "SFMono-Regular", Menlo, monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    background: var(--paper);
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.55;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 48px 20px 80px;
+  }
+
+  a {
+    color: var(--pine);
+  }
+
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    color: var(--ink);
+    margin: 0;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+  }
+
+  p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    background: var(--chip-bg);
+    color: var(--chip-ink);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+
+  .intro {
+    max-width: 62ch;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  header {
+    margin-bottom: 40px;
+  }
+
+  section {
+    margin-bottom: 32px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 28px clamp(20px, 4vw, 36px);
+  }
+
+  .card-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+
+  .card-head p {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin: 4px 0 0;
+    flex-basis: 100%;
+  }
+
+  /* --- pill button --- */
+  .pill-btn {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--pine);
+    border: none;
+    border-radius: 999px;
+    padding: 9px 18px;
+    cursor: pointer;
+  }
+
+  .pill-btn:hover {
+    background: #244a37;
+  }
+
+  /* --- input fields --- */
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 26px 32px;
+  }
+
+  .field {
+    min-width: 0;
+  }
+
+  .field-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .field-head label {
+    font-size: 0.94rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .field-unit {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .field-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    height: 6px;
+    background: var(--line);
+    border-radius: 999px;
+    outline-offset: 4px;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--pine);
+    border: 2px solid var(--card);
+    box-shadow: 0 0 0 1px var(--pine);
+    cursor: pointer;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--pine);
+    border: 2px solid var(--card);
+    box-shadow: 0 0 0 1px var(--pine);
+    cursor: pointer;
+  }
+
+  input[type="range"]::-moz-range-track {
+    height: 6px;
+    background: var(--line);
+    border-radius: 999px;
+  }
+
+  input[type="number"] {
+    flex: 0 0 auto;
+    width: 9ch;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    text-align: right;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 7px 6px;
+  }
+
+  /* remove number spinner clutter but keep it operable */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    opacity: 0.6;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--pine);
+    outline-offset: 2px;
+  }
+
+  /* --- stat rows --- */
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 6px 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .stat-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .stat-label {
+    color: var(--muted);
+    font-size: 0.94rem;
+  }
+
+  .stat-value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  .stat-value.total {
+    font-size: 1.2rem;
+    color: var(--pine);
+  }
+
+  /* --- punchline / hero --- */
+  .punchline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 22px;
+  }
+
+  .hero-block {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 24px;
+  }
+
+  .hero-block.primary {
+    border-color: var(--pine);
+    background: #EAF1EB;
+  }
+
+  .hero-label {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .hero-number {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--pine);
+    line-height: 1.1;
+  }
+
+  .hero-block.primary .hero-number {
+    font-size: clamp(2.1rem, 6vw, 3rem);
+  }
+
+  .hero-block.secondary .hero-number {
+    font-size: 1.7rem;
+  }
+
+  .hero-sub {
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+    color: var(--ink);
+    margin-top: 6px;
+  }
+
+  .hero-sentence {
+    margin-top: 18px;
+    font-size: 1.08rem;
+    color: var(--ink);
+  }
+
+  /* --- bar chart --- */
+  .bar-chart {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .bar-row-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+  }
+
+  .bar-row-head .bar-name {
+    color: var(--muted);
+  }
+
+  .bar-row-head .bar-value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .bar-track {
+    background: var(--line);
+    border-radius: 999px;
+    height: 16px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--pine);
+  }
+
+  .bar-fill.current { background: rgba(46, 92, 69, 0.35); }
+  .bar-fill.plus1 { background: rgba(46, 92, 69, 0.68); }
+  .bar-fill.plus5 { background: var(--pine); }
+
+  /* --- assumptions --- */
+  details.card summary {
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    color: var(--ink);
+    list-style: none;
+  }
+
+  details.card summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details.card summary::before {
+    content: "+ ";
+    color: var(--pine);
+    font-family: var(--font-mono);
+  }
+
+  details.card[open] summary::before {
+    content: "\2212 ";
+  }
+
+  details.card p {
+    margin-top: 16px;
+    color: var(--muted);
+  }
+
+  footer {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.9rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    justify-content: space-between;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bar-fill {
+      transition: width 0.35s ease;
+    }
+    .pill-btn {
+      transition: background 0.15s ease;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <header>
+    <span class="eyebrow">MINDBLOOM DOSSIER &middot; 02</span>
+    <h1>The Show-Rate Ledger</h1>
+    <p class="intro">
+      The numbers below are illustrative, not Mindbloom's actual figures. Drag the sliders,
+      or type into the fields, and swap in numbers that look like your program's real funnel
+      to see what one point of show rate is worth, in dollars and in people who get to start care.
+    </p>
+  </header>
+
+  <section class="card" aria-labelledby="inputs-heading">
+    <div class="card-head">
+      <h2 id="inputs-heading">Your funnel</h2>
+      <button type="button" class="pill-btn" id="resetBtn">Reset to illustrative defaults</button>
+      <p>Five inputs describe a program-based telehealth funnel, from eligibility check to program start.</p>
+    </div>
+
+    <div class="field-grid">
+
+      <div class="field">
+        <div class="field-head">
+          <label for="checksRange" id="checksLabel">Monthly completed eligibility checks</label>
+          <span class="field-unit">checks / mo</span>
+        </div>
+        <div class="field-controls">
+          <input type="range" id="checksRange" min="200" max="20000" step="100" value="4000"
+                 aria-labelledby="checksLabel">
+          <input type="number" id="checksNumber" min="200" max="20000" step="100" value="4000"
+                 aria-labelledby="checksLabel" inputmode="numeric">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-head">
+          <label for="bookingRange" id="bookingLabel">Check-to-consult booking rate</label>
+          <span class="field-unit">%</span>
+        </div>
+        <div class="field-controls">
+          <input type="range" id="bookingRange" min="5" max="60" step="1" value="30"
+                 aria-labelledby="bookingLabel">
+          <input type="number" id="bookingNumber" min="5" max="60" step="1" value="30"
+                 aria-labelledby="bookingLabel" inputmode="numeric">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-head">
+          <label for="showRange" id="showLabel">Consult show rate</label>
+          <span class="field-unit">%</span>
+        </div>
+        <div class="field-controls">
+          <input type="range" id="showRange" min="30" max="95" step="1" value="62"
+                 aria-labelledby="showLabel">
+          <input type="number" id="showNumber" min="30" max="95" step="1" value="62"
+                 aria-labelledby="showLabel" inputmode="numeric">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-head">
+          <label for="convRange" id="convLabel">Consult-to-program conversion</label>
+          <span class="field-unit">%</span>
+        </div>
+        <div class="field-controls">
+          <input type="range" id="convRange" min="10" max="70" step="1" value="40"
+                 aria-labelledby="convLabel">
+          <input type="number" id="convNumber" min="10" max="70" step="1" value="40"
+                 aria-labelledby="convLabel" inputmode="numeric">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-head">
+          <label for="priceRange" id="priceLabel">Program price</label>
+          <span class="field-unit">USD</span>
+        </div>
+        <div class="field-controls">
+          <input type="range" id="priceRange" min="500" max="3000" step="10" value="1000"
+                 aria-labelledby="priceLabel">
+          <input type="number" id="priceNumber" min="500" max="3000" step="10" value="1000"
+                 aria-labelledby="priceLabel" inputmode="numeric">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="funnel-heading">
+    <div class="card-head">
+      <h2 id="funnel-heading">This month's funnel</h2>
+    </div>
+    <div aria-live="polite">
+      <div class="stat-row">
+        <span class="stat-label">Consults booked</span>
+        <span class="stat-value" id="outConsultsBooked">0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Consults attended</span>
+        <span class="stat-value" id="outConsultsAttended">0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Programs started</span>
+        <span class="stat-value" id="outProgramsStarted">0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Monthly program revenue</span>
+        <span class="stat-value" id="outMonthlyRevenue">$0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Annual program revenue</span>
+        <span class="stat-value total" id="outAnnualRevenue">$0</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="punchline-heading">
+    <div class="card-head">
+      <h2 id="punchline-heading">What one point of show rate is worth</h2>
+    </div>
+
+    <div class="punchline-grid" aria-live="polite">
+      <div class="hero-block primary">
+        <div class="hero-label">+1 point of show rate, per year</div>
+        <div class="hero-number" id="heroDelta">$0</div>
+        <div class="hero-sub"><span id="heroPeople">0</span> more programs started</div>
+      </div>
+      <div class="hero-block secondary">
+        <div class="hero-label">+5 points of show rate, per year</div>
+        <div class="hero-number" id="plus5Delta">$0</div>
+        <div class="hero-sub"><span id="plus5People">0</span> more programs started</div>
+      </div>
+    </div>
+
+    <p class="hero-sentence" id="heroSentence">
+      One point of show rate is $0 a year and 0 more people starting care.
+    </p>
+
+    <div class="bar-chart">
+      <div class="bar-row">
+        <div class="bar-row-head">
+          <span class="bar-name">Current annual revenue</span>
+          <span class="bar-value" id="barCurrentValue">$0</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill current" id="barCurrentFill" style="width:0%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-row-head">
+          <span class="bar-name">At +1 point show rate</span>
+          <span class="bar-value" id="barPlus1Value">$0</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill plus1" id="barPlus1Fill" style="width:0%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-row-head">
+          <span class="bar-name">At +5 points show rate</span>
+          <span class="bar-value" id="barPlus5Value">$0</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill plus5" id="barPlus5Fill" style="width:0%"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <details class="card">
+    <summary>How this model works</summary>
+    <p>
+      This ledger multiplies five numbers straight through the funnel: eligibility checks, the
+      share that book a consult, the share that show up, the share that converts to a program,
+      and the program price. It assumes every check carries the same odds of booking and
+      attending, so one blended show rate stands in for the whole population rather than
+      varying by channel, day, or clinician. It holds booking rate, conversion rate, and price
+      steady while show rate moves, even though in a real program better reminders or
+      scheduling can lift more than one rate at once. It also assumes no capacity limit: every
+      consult that would happen gets staffed, and every program that starts gets delivered.
+    </p>
+  </details>
+
+  <footer>
+    <span>Part of a work-sample dossier by Don Florencio &middot; fictional defaults &middot; math runs in your browser, nothing is recorded.</span>
+    <a href="index.html">Back to the dossier</a>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var fmtInt = new Intl.NumberFormat('en-US');
+  var fmtUsd0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+  var RANGES = {
+    checks: { min: 200, max: 20000 },
+    booking: { min: 5, max: 60 },
+    show: { min: 30, max: 95 },
+    conv: { min: 10, max: 70 },
+    price: { min: 500, max: 3000 }
+  };
+
+  var DEFAULTS = {
+    checks: 4000,
+    booking: 30,
+    show: 62,
+    conv: 40,
+    price: 1000
+  };
+
+  var state = {
+    checks: DEFAULTS.checks,
+    booking: DEFAULTS.booking,
+    show: DEFAULTS.show,
+    conv: DEFAULTS.conv,
+    price: DEFAULTS.price
+  };
+
+  var els = {};
+
+  function clamp(v, min, max) {
+    return Math.min(max, Math.max(min, v));
+  }
+
+  function setText(id, text) {
+    var el = els[id] || document.getElementById(id);
+    if (el) { el.textContent = text; }
+  }
+
+  function computeFunnel(checks, booking, show, conv, price) {
+    var consultsBooked = checks * (booking / 100);
+    var consultsAttended = consultsBooked * (show / 100);
+    var programsStarted = consultsAttended * (conv / 100);
+    var monthlyRevenue = programsStarted * price;
+    var annualRevenue = monthlyRevenue * 12;
+    return {
+      consultsBooked: consultsBooked,
+      consultsAttended: consultsAttended,
+      programsStarted: programsStarted,
+      monthlyRevenue: monthlyRevenue,
+      annualRevenue: annualRevenue
+    };
+  }
+
+  function setBar(fillId, valueId, value, max) {
+    var fill = document.getElementById(fillId);
+    var label = document.getElementById(valueId);
+    var pct = max > 0 ? clamp((value / max) * 100, 0, 100) : 0;
+    if (fill) { fill.style.width = pct + '%'; }
+    if (label) { label.textContent = fmtUsd0.format(Math.round(value)); }
+  }
+
+  function recompute() {
+    var s = state;
+    var base = computeFunnel(s.checks, s.booking, s.show, s.conv, s.price);
+
+    var show1 = clamp(s.show + 1, RANGES.show.min, 100);
+    var show5 = clamp(s.show + 5, RANGES.show.min, 100);
+
+    var plus1 = computeFunnel(s.checks, s.booking, show1, s.conv, s.price);
+    var plus5 = computeFunnel(s.checks, s.booking, show5, s.conv, s.price);
+
+    setText('outConsultsBooked', fmtInt.format(Math.round(base.consultsBooked)));
+    setText('outConsultsAttended', fmtInt.format(Math.round(base.consultsAttended)));
+    setText('outProgramsStarted', fmtInt.format(Math.round(base.programsStarted)));
+    setText('outMonthlyRevenue', fmtUsd0.format(Math.round(base.monthlyRevenue)));
+    setText('outAnnualRevenue', fmtUsd0.format(Math.round(base.annualRevenue)));
+
+    var delta1 = plus1.annualRevenue - base.annualRevenue;
+    var delta5 = plus5.annualRevenue - base.annualRevenue;
+    var people1 = Math.round((plus1.programsStarted - base.programsStarted) * 12);
+    var people5 = Math.round((plus5.programsStarted - base.programsStarted) * 12);
+
+    setText('heroDelta', fmtUsd0.format(Math.round(delta1)));
+    setText('heroPeople', fmtInt.format(people1));
+    setText('plus5Delta', fmtUsd0.format(Math.round(delta5)));
+    setText('plus5People', fmtInt.format(people5));
+
+    var personWord = Math.abs(people1) === 1 ? 'person' : 'people';
+    var sentence = 'One point of show rate is ' + fmtUsd0.format(Math.round(delta1)) +
+      ' a year and ' + fmtInt.format(people1) + ' more ' + personWord + ' starting care.';
+    setText('heroSentence', sentence);
+
+    var maxVal = Math.max(base.annualRevenue, plus1.annualRevenue, plus5.annualRevenue, 1);
+    setBar('barCurrentFill', 'barCurrentValue', base.annualRevenue, maxVal);
+    setBar('barPlus1Fill', 'barPlus1Value', plus1.annualRevenue, maxVal);
+    setBar('barPlus5Fill', 'barPlus5Value', plus5.annualRevenue, maxVal);
+  }
+
+  function bindControl(key, rangeEl, numberEl) {
+    var r = RANGES[key];
+
+    rangeEl.addEventListener('input', function () {
+      var v = clamp(parseFloat(rangeEl.value), r.min, r.max);
+      state[key] = v;
+      numberEl.value = v;
+      recompute();
+    });
+
+    numberEl.addEventListener('input', function () {
+      var raw = parseFloat(numberEl.value);
+      if (isNaN(raw)) { return; }
+      var v = clamp(raw, r.min, r.max);
+      state[key] = v;
+      rangeEl.value = v;
+      recompute();
+    });
+
+    numberEl.addEventListener('change', function () {
+      var raw = parseFloat(numberEl.value);
+      var v = isNaN(raw) ? state[key] : clamp(raw, r.min, r.max);
+      numberEl.value = v;
+      rangeEl.value = v;
+      state[key] = v;
+      recompute();
+    });
+  }
+
+  function resetDefaults() {
+    Object.keys(DEFAULTS).forEach(function (key) {
+      state[key] = DEFAULTS[key];
+      var rangeEl = document.getElementById(key + 'Range');
+      var numberEl = document.getElementById(key + 'Number');
+      if (rangeEl) { rangeEl.value = DEFAULTS[key]; }
+      if (numberEl) { numberEl.value = DEFAULTS[key]; }
+    });
+    recompute();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    ['checks', 'booking', 'show', 'conv', 'price'].forEach(function (key) {
+      var rangeEl = document.getElementById(key + 'Range');
+      var numberEl = document.getElementById(key + 'Number');
+      bindControl(key, rangeEl, numberEl);
+    });
+
+    var resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', resetDefaults);
+    }
+
+    recompute();
+  });
+})();
+</script>
+
+</body>
+</html>
